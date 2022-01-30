@@ -9,15 +9,26 @@ interface Cinema {
     original_language:String;    
 }
 
-interface Recomendation {
+interface GameGenere {
     id:Number;
-    recomendations:Cinema[];
+    name:String;
 }
 
-export {Cinema, Recomendation}
+interface Game {
+    id:String;
+    year:String;
+    title:String;
+    overview:String;
+    genres:GameGenere[];
+    category:String;
+}
+
+
+export {Cinema, Game, GameGenere}
 
 
 /*
+JSON EXAMPLES:::::
 MOVIES 
  {
             "id": 730154,
@@ -41,4 +52,24 @@ TV
                 35
             ]
         },
+*/
+
+/*
+{
+            "id": 86148,
+            "year": 2018,
+            "title": "Celeste Classic",
+            "overview": "A hardcore platform game for the PICO-8 fantasy console.",
+            "genres": [
+                {
+                    "id": 8,
+                    "name": "Platform"
+                },
+                {
+                    "id": 32,
+                    "name": "Indie"
+                }
+            ],
+            "category": 0
+        }
 */

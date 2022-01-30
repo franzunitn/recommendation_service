@@ -1,12 +1,12 @@
 /** source/controllers/recombeeController.ts */
 import { Request, Response, NextFunction } from 'express';
-import { Cinema, Recomendation } from '../models/interfaces';
-
+import { Cinema} from '../models/interfaces';
+import {Config} from '../config/config'
+let config: Config = require('../config/config.json');
 
 var recombee = require('recombee-api-client');
 var rqs = recombee.requests;
-const privateToken = "NMBg52k5YJ89azgbjsNtwc4BCRO0tgBMBNetRngQdYlQCAseleRQiLfNfZMwoJBa";
-var client = new recombee.ApiClient('mymovie-dev', privateToken);
+var client = new recombee.ApiClient('mymovie-dev', config.recombee_token);
 
 
 //add user to recombee database
@@ -93,8 +93,6 @@ const addMovie = async (req: Request, res: Response, next: NextFunction) => {
 const getRecomendation = async (req: Request, res: Response, next: NextFunction) => {
     let user_id: string = req.params.user_id;
     let number: string = req.params.number;
-    console.log(user_id);
-    console.log(number);
     try{
         let result = await client.send(new rqs.RecommendItemsToUser(user_id, number));
         res.statusCode = 200;
@@ -107,6 +105,7 @@ const getRecomendation = async (req: Request, res: Response, next: NextFunction)
 
 
 const getRecomendedMovies = async (req: Request, res: Response, next: NextFunction) => {
+    console.log("OK");
     let user_id: string = req.params.user_id;
     let number: string = req.params.number;
     try{
@@ -121,41 +120,20 @@ const getRecomendedMovies = async (req: Request, res: Response, next: NextFuncti
     }
 };
 
-
-//add user to recombee database
-const initPropeties = async (req: Request, res: Response, next: NextFunction) => {
-    client.send(new rqs.AddItemProperty('adult', 'boolean'))
-    .then((response:any) => {
-    return client.send(new rqs.AddItemProperty('year', 'string'));
-    console.log(response);
-    })
-    .then((response:any) => {
-        return client.send(new rqs.AddItemProperty('title', 'string'));
-        console.log(response);
-    })
-    .then((response:any) => {
-        return client.send(new rqs.AddItemProperty('overview', 'string'));
-        console.log(response);
-    })
-    .then((response:any) => {
-        return client.send(new rqs.AddItemProperty('genre_ids', 'set'));
-        console.log(response);
-    })
-    .then((response:any) => {
-        return client.send(new rqs.AddItemProperty('original_language', 'string'));
-        console.log(response);
-    })
-    .then((response:any) => {
-        return client.send(new rqs.AddItemProperty('type', 'string'));
-        console.log(response);
-    })
-    .catch((error:any) => {
-        return res.json(error);
-    })
-    .then((response:any) => {
-        return res.json(response);
-    })
-    
+const getRecomendedTv = async (req: Request, res: Response, next: NextFunction) => {
+    console.log("OK");
+    let user_id: string = req.params.user_id;
+    let number: string = req.params.number;
+    try{
+        let result = await client.send(new rqs.RecommendItemsToUser(user_id, number, {
+            filter: '(\'type\' == "tv")'
+        }));
+        res.statusCode = 200;
+        return res.json(result);
+    } catch (err){
+        res.statusCode = 400;
+        return res.json(err);
+    }
 };
 
 
@@ -167,4 +145,7 @@ const initPropeties = async (req: Request, res: Response, next: NextFunction) =>
 
 
 
-export default { addUser, addInteraction, addMovie, getRecomendation, getRecomendedMovies, initPropeties };
+
+
+
+export default { addUser, addInteraction, addMovie, getRecomendation, getRecomendedMovies, getRecomendedTv};

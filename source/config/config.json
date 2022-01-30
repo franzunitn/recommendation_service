@@ -1,3 +1,4 @@
 {
-    "film_adapter_url": "http://localhost:6060"
+    "film_adapter_url": "http://localhost:6060",
+    "recombee_token": "NMBg52k5YJ89azgbjsNtwc4BCRO0tgBMBNetRngQdYlQCAseleRQiLfNfZMwoJBa"
 }
