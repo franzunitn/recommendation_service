@@ -1,4 +1,5 @@
 /** source/controllers/recombeeController.ts */
+import axios from 'axios';
 import { Request, Response, NextFunction } from 'express';
 import { Cinema} from '../models/interfaces';
 import {Config} from '../config/config'
@@ -93,10 +94,36 @@ const addMovie = async (req: Request, res: Response, next: NextFunction) => {
 const getRecomendation = async (req: Request, res: Response, next: NextFunction) => {
     let user_id: string = req.params.user_id;
     let number: string = req.params.number;
+    
     try{
-        let result = await client.send(new rqs.RecommendItemsToUser(user_id, number));
+        let recom = await client.send(new rqs.RecommendItemsToUser(user_id, number));
+            var recomendations: any[] = [];
+            for (let element of recom['recomms']){
+                var id_type = element.id;
+                var type = id_type.split('-')[0];
+                var id = id_type.split('-')[1];
+
+                if (type == 'movie'){
+                    var response = await axios.get(config.film_adapter_url+'/movie/'+id);
+                    var data = await response.data;
+                    data['type'] = 'movie';
+                    recomendations.push(data);
+                }
+                if (type == 'tv'){
+                    var response = await axios.get(config.film_adapter_url+'/tv/'+id);
+                    var data = await response.data;
+                    data['type'] = 'tv';
+                    recomendations.push(data);
+                }
+                if (type == 'game'){
+                    var response = await axios.get(config.film_adapter_url+'/game/'+id);
+                    var data = await response.data;
+                    data['type'] = 'game';
+                    recomendations.push(data);
+                }
+            }
         res.statusCode = 200;
-        return res.json(result);
+        return res.json(recomendations);
     } catch (err){
         res.statusCode = 400;
         return res.json(err);
@@ -105,15 +132,24 @@ const getRecomendation = async (req: Request, res: Response, next: NextFunction)
 
 
 const getRecomendedMovies = async (req: Request, res: Response, next: NextFunction) => {
-    console.log("OK");
     let user_id: string = req.params.user_id;
     let number: string = req.params.number;
     try{
-        let result = await client.send(new rqs.RecommendItemsToUser(user_id, number, {
+        let recom = await client.send(new rqs.RecommendItemsToUser(user_id, number, {
             filter: '(\'type\' == "movie")'
         }));
+        var recomendations: any[] = [];
+            for (let element of recom['recomms']){
+                var id_type = element.id;
+                var type = id_type.split('-')[0];
+                var id = id_type.split('-')[1];
+                var response = await axios.get(config.film_adapter_url+'/movie/'+id);
+                var data = await response.data;
+                recomendations.push(data);
+                }
+                
         res.statusCode = 200;
-        return res.json(result);
+        return res.json(recomendations);
     } catch (err){
         res.statusCode = 400;
         return res.json(err);
@@ -121,15 +157,49 @@ const getRecomendedMovies = async (req: Request, res: Response, next: NextFuncti
 };
 
 const getRecomendedTv = async (req: Request, res: Response, next: NextFunction) => {
-    console.log("OK");
     let user_id: string = req.params.user_id;
     let number: string = req.params.number;
     try{
-        let result = await client.send(new rqs.RecommendItemsToUser(user_id, number, {
+        let recom = await client.send(new rqs.RecommendItemsToUser(user_id, number, {
             filter: '(\'type\' == "tv")'
         }));
+        var recomendations: any[] = [];
+            for (let element of recom['recomms']){
+                var id_type = element.id;
+                var type = id_type.split('-')[0];
+                var id = id_type.split('-')[1];
+                var response = await axios.get(config.film_adapter_url+'/tv/'+id);
+                var data = await response.data;
+                recomendations.push(data);
+                }
+                
         res.statusCode = 200;
-        return res.json(result);
+        return res.json(recomendations);
+    } catch (err){
+        res.statusCode = 400;
+        return res.json(err);
+    }
+};
+
+const getRecomendedGame = async (req: Request, res: Response, next: NextFunction) => {
+    let user_id: string = req.params.user_id;
+    let number: string = req.params.number;
+    try{
+        let recom = await client.send(new rqs.RecommendItemsToUser(user_id, number, {
+            filter: '(\'type\' == "game")'
+        }));
+        var recomendations: any[] = [];
+            for (let element of recom['recomms']){
+                var id_type = element.id;
+                var type = id_type.split('-')[0];
+                var id = id_type.split('-')[1];
+                var response = await axios.get(config.film_adapter_url+'/game/'+id);
+                var data = await response.data;
+                recomendations.push(data);
+                }
+                
+        res.statusCode = 200;
+        return res.json(recomendations);
     } catch (err){
         res.statusCode = 400;
         return res.json(err);
@@ -148,4 +218,4 @@ const getRecomendedTv = async (req: Request, res: Response, next: NextFunction) 
 
 
 
-export default { addUser, addInteraction, addMovie, getRecomendation, getRecomendedMovies, getRecomendedTv};
+export default { addUser, addInteraction, addMovie, getRecomendation, getRecomendedMovies, getRecomendedTv, getRecomendedGame};
