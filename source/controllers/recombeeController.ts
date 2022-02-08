@@ -94,7 +94,10 @@ const addMovie = async (req: Request, res: Response, next: NextFunction) => {
 const getRecomendation = async (req: Request, res: Response, next: NextFunction) => {
     let user_id: string = req.params.user_id;
     let number: string = req.params.number;
-    
+    let token = req.header('x-access-token');
+    if (token == undefined){
+        token='';
+    }
     try{
         let recom = await client.send(new rqs.RecommendItemsToUser(user_id, number));
             var recomendations: any[] = [];
@@ -104,19 +107,31 @@ const getRecomendation = async (req: Request, res: Response, next: NextFunction)
                 var id = id_type.split('-')[1];
 
                 if (type == 'movie'){
-                    var response = await axios.get(config.film_adapter_url+'/movie/'+id);
+                    var response = await axios.get(config.film_adapter_url+'/movie/'+id, {
+                        headers: {
+                            'x-access-token': token
+                        },
+                    });
                     var data = await response.data;
                     data['type'] = 'movie';
                     recomendations.push(data);
                 }
                 if (type == 'tv'){
-                    var response = await axios.get(config.film_adapter_url+'/tv/'+id);
+                    var response = await axios.get(config.film_adapter_url+'/tv/'+id, {
+                        headers: {
+                            'x-access-token': token
+                        },
+                    });
                     var data = await response.data;
                     data['type'] = 'tv';
                     recomendations.push(data);
                 }
                 if (type == 'game'){
-                    var response = await axios.get(config.film_adapter_url+'/game/'+id);
+                    var response = await axios.get(config.film_adapter_url+'/game/'+id, {
+                        headers: {
+                            'x-access-token': token
+                        },
+                    });
                     var data = await response.data;
                     data['type'] = 'game';
                     recomendations.push(data);
@@ -134,6 +149,10 @@ const getRecomendation = async (req: Request, res: Response, next: NextFunction)
 const getRecomendedMovies = async (req: Request, res: Response, next: NextFunction) => {
     let user_id: string = req.params.user_id;
     let number: string = req.params.number;
+    let token = req.header('x-access-token');
+    if (token == undefined){
+        token='';
+    }
     try{
         let recom = await client.send(new rqs.RecommendItemsToUser(user_id, number, {
             filter: '(\'type\' == "movie")'
@@ -143,7 +162,11 @@ const getRecomendedMovies = async (req: Request, res: Response, next: NextFuncti
                 var id_type = element.id;
                 var type = id_type.split('-')[0];
                 var id = id_type.split('-')[1];
-                var response = await axios.get(config.film_adapter_url+'/movie/'+id);
+                var response = await axios.get(config.film_adapter_url+'/movie/'+id, {
+                    headers: {
+                        'x-access-token': token
+                    },
+                });
                 var data = await response.data;
                 recomendations.push(data);
                 }
@@ -159,6 +182,10 @@ const getRecomendedMovies = async (req: Request, res: Response, next: NextFuncti
 const getRecomendedTv = async (req: Request, res: Response, next: NextFunction) => {
     let user_id: string = req.params.user_id;
     let number: string = req.params.number;
+    let token = req.header('x-access-token');
+    if (token == undefined){
+        token='';
+    }
     try{
         let recom = await client.send(new rqs.RecommendItemsToUser(user_id, number, {
             filter: '(\'type\' == "tv")'
@@ -168,7 +195,11 @@ const getRecomendedTv = async (req: Request, res: Response, next: NextFunction) 
                 var id_type = element.id;
                 var type = id_type.split('-')[0];
                 var id = id_type.split('-')[1];
-                var response = await axios.get(config.film_adapter_url+'/tv/'+id);
+                var response = await axios.get(config.film_adapter_url+'/tv/'+id, {
+                    headers: {
+                        'x-access-token': token
+                    },
+                });
                 var data = await response.data;
                 recomendations.push(data);
                 }
@@ -184,6 +215,10 @@ const getRecomendedTv = async (req: Request, res: Response, next: NextFunction) 
 const getRecomendedGame = async (req: Request, res: Response, next: NextFunction) => {
     let user_id: string = req.params.user_id;
     let number: string = req.params.number;
+    let token = req.header('x-access-token');
+    if (token == undefined){
+        token='';
+    }
     try{
         let recom = await client.send(new rqs.RecommendItemsToUser(user_id, number, {
             filter: '(\'type\' == "game")'
@@ -193,7 +228,11 @@ const getRecomendedGame = async (req: Request, res: Response, next: NextFunction
                 var id_type = element.id;
                 var type = id_type.split('-')[0];
                 var id = id_type.split('-')[1];
-                var response = await axios.get(config.film_adapter_url+'/game/'+id);
+                var response = await axios.get(config.film_adapter_url+'/game/'+id, {
+                    headers: {
+                        'x-access-token': token
+                    },
+                });
                 var data = await response.data;
                 recomendations.push(data);
                 }

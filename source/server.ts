@@ -5,7 +5,7 @@ import http from 'http';
 import express, { Express } from 'express';
 import morgan from 'morgan';
 import routes from './routes/recombeeRoutes';
-
+import auth from './middleware/auth';
 const router: Express = express();
 
 /** Logging */
@@ -30,7 +30,8 @@ router.use((req, res, next) => {
 });
 
 /** Routes */
-router.use('/', routes);
+//router.use('/', routes);
+router.use('/', auth.authRecombee, routes);
 
 /** Error handling */
 router.use((req, res, next) => {
