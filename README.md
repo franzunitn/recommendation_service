@@ -17,10 +17,6 @@
   **Required:**
   `x-access-token=your_jwt`
 
-* **Url Params**
-
-  **Optional:**
-
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -60,7 +56,6 @@
   **Required:**
   `x-access-token=your_jwt`
 
-* **Url Params**
 * **Data Params**
 
   **Required:**
@@ -317,9 +312,6 @@
   **Required:**
   `x-access-token=your_jwt`
 
-* **Url Params**
-
-  **Required:**
 
 * **Success Response:**
 
@@ -360,9 +352,6 @@
   **Required:**
   `x-access-token=your_jwt`
 
-* **Url Params**
-
-  **Required:**
 
 * **Success Response:**
 
@@ -402,9 +391,6 @@
   **Required:**
   `x-access-token=your_jwt`
 
-* **Url Params**
-
-  **Required:**
 
 * **Success Response:**
 
@@ -443,9 +429,6 @@
   **Required:**
   `x-access-token=your_jwt`
 
-* **Url Params**
-
-  **Required:**
 
 * **Success Response:**
 
