@@ -19,7 +19,7 @@ const hasPermission = async (req: Request, res: Response , next: NextFunction, p
     
     return next();
   }catch(e) {
-    return res.status(500).send({message: "Invalid auth request"});
+    return res.status(400).send({message: "Invalid auth request"});
   }
 } 
 
