@@ -1,3 +1,5 @@
+***API DOCUMENTATION***
+
 **Add user**
 ----
   Add a user to recombee system
