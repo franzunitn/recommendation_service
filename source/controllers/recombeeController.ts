@@ -17,9 +17,8 @@ const addUser = async (req: Request, res: Response, next: NextFunction) => {
         let result = await client.send(new rqs.AddUser(user_id));
         res.statusCode = 200;
         return res.json(result);
-    } catch (err){
-        res.statusCode = 400;
-        return res.json(err);
+    } catch (e:any){
+        return res.status(e.response.status).send({message: e.response.data});
     }
 };
 
@@ -38,18 +37,16 @@ const addInteraction = async (req: Request, res: Response, next: NextFunction) =
             let result = await client.send(new rqs.AddDetailView(user_id, item_id, {cascadeCreate: false}));
             res.statusCode = 200;
             return res.json(result);
-        } catch (err){
-            res.statusCode = 400;
-            return res.json(err);
+        } catch (e:any){
+            return res.status(e.response.status).send({message: e.response.data});
         }
     } else if (interaction_type == 'purchase'){
         try{
             let result = await client.send(new rqs.AddPurchase(user_id, item_id, {cascadeCreate: false}));
             res.statusCode = 200;
             return res.json(result);
-        } catch (err){
-            res.statusCode = 400;
-            return res.json(err);
+        } catch (e:any){
+            return res.status(e.response.status).send({message: e.response.data});
         }
     } else {
         res.statusCode = 400;
@@ -84,9 +81,8 @@ const addMovie = async (req: Request, res: Response, next: NextFunction) => {
 
             res.statusCode = 200;
             return res.json(result);
-    } catch (err){
-        res.statusCode = 400;
-        return res.json(err);
+    } catch (e:any){
+        return res.status(e.response.status).send({message: e.response.data});
     }
 
 };
@@ -139,9 +135,8 @@ const getRecomendation = async (req: Request, res: Response, next: NextFunction)
             }
         res.statusCode = 200;
         return res.json(recomendations);
-    } catch (err){
-        res.statusCode = 400;
-        return res.json(err);
+    } catch (e:any){
+        return res.status(e.response.status).send({message: e.response.data});
     }
 };
 
@@ -173,9 +168,8 @@ const getRecomendedMovies = async (req: Request, res: Response, next: NextFuncti
                 
         res.statusCode = 200;
         return res.json(recomendations);
-    } catch (err){
-        res.statusCode = 400;
-        return res.json(err);
+    } catch (e:any){
+        return res.status(e.response.status).send({message: e.response.data});
     }
 };
 
@@ -206,9 +200,8 @@ const getRecomendedTv = async (req: Request, res: Response, next: NextFunction) 
                 
         res.statusCode = 200;
         return res.json(recomendations);
-    } catch (err){
-        res.statusCode = 400;
-        return res.json(err);
+    } catch (e:any){
+        return res.status(e.response.status).send({message: e.response.data});
     }
 };
 
@@ -239,9 +232,8 @@ const getRecomendedGame = async (req: Request, res: Response, next: NextFunction
                 
         res.statusCode = 200;
         return res.json(recomendations);
-    } catch (err){
-        res.statusCode = 400;
-        return res.json(err);
+    } catch (e:any){
+        return res.status(e.response.status).send({message: e.response.data});
     }
 };
 
