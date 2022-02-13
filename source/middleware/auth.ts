@@ -24,7 +24,7 @@ const hasPermission = async (req: Request, res: Response , next: NextFunction, p
 } 
 
 const authRecombee = async (req: Request, res: Response , next: NextFunction) => {
-  return await hasPermission(req, res , next, 'raccomandations');
+  return await hasPermission(req, res , next, 'default');
 }
 
 export default { authRecombee };
