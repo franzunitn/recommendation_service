@@ -110,7 +110,7 @@
 
   * **Code:** 200 <br />
     **Content:** 
-    `{
+    `[{
         "id": id of the item,
         "adult": adult,
         "year": year,
@@ -118,7 +118,7 @@
         "overview": overview,
         "genre_ids": genre_ids,
         "original_language": original language
-    };`
+    }...];`
  
 * **Error Response:**
 
@@ -163,7 +163,7 @@
 
   * **Code:** 200 <br />
     **Content:** 
-    `{
+    `[{
         "id": id of the item,
         "adult": adult,
         "year": year,
@@ -171,7 +171,7 @@
         "overview": overview,
         "genre_ids": genre_ids,
         "original_language": original language
-    };`
+    }...];`
  
 * **Error Response:**
 
@@ -217,14 +217,14 @@
 
   * **Code:** 200 <br />
     **Content:** 
-    `{
+    `[{
         "id": id of the item,
         "year": year,
         "title": title,
         "overview": overview,
         "genre_ids": genre_ids,
         "original_language": original language
-    };`
+    }...];`
  
 * **Error Response:**
 
@@ -269,14 +269,14 @@
 
   * **Code:** 200 <br />
     **Content:** 
-    `{
+    `[{
         "id": id of the item,
         "year": year,
         "title": title,
         "overview": overview,
         "genre_ids": genre_ids,
         "category": category
-    };`
+    }...];`
  
 * **Error Response:**
 
