@@ -25,13 +25,75 @@ const addUser = async (req: Request, res: Response, next: NextFunction) => {
 //aggiunge un interazione params: user_id, item_id, interaction_type = detail_view | purchase
 const addInteraction = async (req: Request, res: Response, next: NextFunction) => {
 
-    let user_id:Number = req.body.user_id ?? null;
-    let item_id:Number = req.body.item_id ?? null;
+    let user_id:String = req.body.user_id ?? null;
+    let item_id:String = req.body.item_id ?? null;
     let interaction_type:String = req.body.interaction_type ?? null;
+    let token = req.header('x-access-token');
+    if (token == undefined){
+        token='';
+    }
     if (user_id == null || item_id == null || interaction_type == null){
         res.statusCode = 400;
         return res.json("Bad request");
     }
+    //controlliamo se l'item è presente
+    try {
+        var existing_item = await client.send(new rqs.ListItems({
+            // optional parameters:
+            'filter': '(\'itemId\' == \"'+item_id+'\")'
+        }));
+    } catch (e:any){
+        return res.status(e.statusCode).send({message: e.message});
+    }
+
+    if (existing_item.length == 0){
+        //prendiamo i dettagli dal film adapter
+        var type = item_id.split('-')[0]; 
+        var id = item_id.split('-')[1];
+        try {
+            var response = await axios.get(config.film_adapter_url+'/'+type+'/'+id, {
+                headers: {
+                    'x-access-token': token
+                },
+            });
+
+            var item = response.data;
+            if (response.status != 200){
+                return res.status(response.status).send(response.data);;
+            }
+            try {
+                await client.send(new rqs.SetItemValues(type+'-'+id,
+                    // values
+                    {
+                    adult:item.adult,
+                    year:item.year,
+                    title:item.title,
+                    overview:item.overview,
+                    genre_ids:item.genre_ids,
+                    original_language:item.original_language, 
+                    category:item.category,
+                    game_genre:item.game_genere,
+                    //aggiungiamo il tipo
+                    type:type
+                    },
+                    {
+                    //creiamo l'item se non c'è 
+                    cascadeCreate: true
+                    }
+                    ))
+            } catch (e:any){
+                //errore aggiunta a recombee
+                return res.status(e.statusCode).send({message: e.message});
+            }
+            
+        } catch (e:any){
+            //errore dati dettaglio item
+            return res.status(e.response.status).send(e.response.data);
+        }
+
+    } 
+    
+
     if (interaction_type == 'detail_view'){
         try{
             let result = await client.send(new rqs.AddDetailView(user_id, item_id, {cascadeCreate: false}));
